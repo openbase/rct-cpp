@@ -92,8 +92,9 @@ public:
 	std::string getAuthorityName() const;
 	void shutdown();
 private:
-    TransformerCore::Ptr core;
+
 	TransformCommunicator::Ptr comm;
+	TransformerCore::Ptr core;
 	TransformerConfig config;
 };
 
