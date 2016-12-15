@@ -60,14 +60,13 @@ void TransformCommRos::shutdown() {
 		it->second->join();
 		delete it->second;
 	}
-	delete tfListener;
 }
 
-bool TransformCommRos::sendTransform(const Transform& transform, TransformType type) {
+bool TransformCommRos::sendTransform(const Transform& transform) {
 
 	geometry_msgs::TransformStamped t;
 	TransformerTF2::convertTransformToTf(transform, t);
-	if (type == STATIC) {
+	if (transform.getTransformType() == STATIC) {
 		if (legacyMode) {
 			RSCDEBUG(logger, "Send transform on legacy mode broadcaster " << t);
 			bool res = sendTransformStaticLegacy(t);
@@ -77,12 +76,12 @@ bool TransformCommRos::sendTransform(const Transform& transform, TransformType t
 			tfBroadcasterStatic.sendTransform(t);
 			return true;
 		}
-	} else if (type == DYNAMIC) {
+	} else if (transform.getTransformType() == DYNAMIC) {
 		RSCDEBUG(logger, "Send transform on non-static broadcaster " << t);
 		tfBroadcaster.sendTransform(t);
 		return true;
 	} else {
-		RSCERROR(logger, "Cannot send transform. Reason: Unknown TransformType: " << type);
+		RSCERROR(logger, "Cannot send transform. Reason: Unknown TransformType: " << transform.getTransformType());
 		return false;
 	}
 	return true;
@@ -105,38 +104,42 @@ bool TransformCommRos::sendTransformStaticLegacy(const geometry_msgs::TransformS
 	return true;
 }
 
-bool TransformCommRos::sendTransform(const vector<Transform>& transform, TransformType type) {
-	vector<geometry_msgs::TransformStamped> ts;
+bool TransformCommRos::sendTransform(const vector<Transform>& transform) {
+	vector<geometry_msgs::TransformStamped> tsstatic, tsdynamic;
 	vector<Transform>::const_iterator it;
 	for (it = transform.begin(); it != transform.end(); ++it) {
 		geometry_msgs::TransformStamped t;
 		TransformerTF2::convertTransformToTf(*it, t);
-		ts.push_back(t);
+		if ((*it).getTransformType() == STATIC) {
+			tsstatic.push_back(t);
+		} else if ((*it).getTransformType() == DYNAMIC) {
+			tsdynamic.push_back(t);
+		} else {
+			RSCERROR(logger, "Cannot send transform. Reason: Unknown TransformType: " << (*it).getTransformType());
+			return false;
+		}
 	}
-	if (type == STATIC) {
-		RSCDEBUG(logger, "Send transform on static broadcaster " << ts);
-		tfBroadcasterStatic.sendTransform(ts);
-	} else if (type == DYNAMIC) {
-		RSCDEBUG(logger, "Send transform on non-static broadcaster " << ts);
-		tfBroadcaster.sendTransform(ts);
-	} else {
-		RSCERROR(logger, "Cannot send transform. Reason: Unknown TransformType: " << type);
-		return false;
-	}
+
+	RSCDEBUG(logger, "Send transform on static broadcaster " << tsstatic);
+	if(!tsstatic.empty()) tfBroadcasterStatic.sendTransform(tsstatic);
+
+	RSCDEBUG(logger, "Send transform on non-static broadcaster " << tsdynamic);
+	if(!tsdynamic.empty()) tfBroadcaster.sendTransform(tsdynamic);
+
 	return true;
 }
 
 void TransformCommRos::addTransformListener(const TransformListener::Ptr& listener) {
-	boost::mutex::scoped_lock(mutex);
+	boost::mutex::scoped_lock(mutex_listener);
 	listeners.push_back(listener);
 }
 
 void TransformCommRos::addTransformListener(const vector<TransformListener::Ptr>& l) {
-	boost::mutex::scoped_lock(mutex);
+	boost::mutex::scoped_lock(mutex_listener);
 	listeners.insert(listeners.end(), l.begin(), l.end());
 }
 void TransformCommRos::removeTransformListener(const TransformListener::Ptr& listener) {
-	boost::mutex::scoped_lock(mutex);
+	boost::mutex::scoped_lock(mutex_listener);
 	vector<TransformListener::Ptr>::iterator it = find(listeners.begin(), listeners.end(),
 			listener);
 	if (it != listeners.end()) {
@@ -160,14 +163,17 @@ void TransformCommRos::transformCallback(const geometry_msgs::TransformStamped r
 			"Got transform from ROS. parent:" << rosTransform.header.frame_id << " child:" << rosTransform.child_frame_id << " auth:" << authorityClean);
 
 	vector<TransformListener::Ptr>::iterator it;
-	boost::mutex::scoped_lock(mutex);
+	
 	Transform t;
+
 	TransformerTF2::convertTfToTransform(rosTransform, t);
+
 	t.setAuthority(authorityClean);
-	RSCDEBUG(logger, "Received transform: " << t);
+	
+	boost::mutex::scoped_lock(mutex_listener);
 	for (it = listeners.begin(); it != listeners.end(); ++it) {
 		TransformListener::Ptr l = *it;
-		l->newTransformAvailable(t, is_static);
+		l->newTransformAvailable(t);
 	}
 	RSCTRACE(logger, "Notification done");
 }

@@ -34,12 +34,12 @@ string TransformPublisher::getAuthorityName() const {
 	return comm->getAuthorityName();
 }
 
-bool TransformPublisher::sendTransform(const Transform& transform, TransformType type) {
-	return comm->sendTransform(transform, type);
+bool TransformPublisher::sendTransform(const Transform& transform) {
+	return comm->sendTransform(transform);
 }
 
-bool TransformPublisher::sendTransform(const std::vector<Transform>& transforms, TransformType type) {
-	return comm->sendTransform(transforms, type);
+bool TransformPublisher::sendTransform(const std::vector<Transform>& transforms) {
+	return comm->sendTransform(transforms);
 }
 
 void TransformPublisher::shutdown() {

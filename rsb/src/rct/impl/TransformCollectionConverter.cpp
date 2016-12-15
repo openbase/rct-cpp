@@ -22,7 +22,7 @@ using namespace rsb::converter;
 namespace rct {
 
 void TransformCollectionConverter::domainToRST(const vector<Transform>& transforms, FrameTransformCollection &ts) {
-    for(int i=0; i<transforms.size(); ++i) {
+    for(long unsigned int i=0; i<transforms.size(); ++i) {
         FrameTransform* t = ts.add_transforms();
         
 	transformConverter.domainToRST(transforms[i], *t);

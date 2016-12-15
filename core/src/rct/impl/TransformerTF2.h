@@ -31,7 +31,7 @@ public:
 	 * \param is_static Record this transform as a static transform.  It will be good across all time.  (This cannot be changed after the first call.)
 	 * \return True unless an error occured
 	 */
-	virtual bool setTransform(const Transform& transform, bool is_static = false);
+	virtual bool setTransform(const Transform& transform);
 
 	/** \brief Get the transform between two frames by frame ID.
 	 * \param target_frame The frame to which data should be transformed
@@ -127,7 +127,7 @@ public:
 
 	void printContents(std::ostream& stream) const;
 
-	virtual void newTransformAvailable(const rct::Transform&, bool isStatic);
+	virtual void newTransformAvailable(const rct::Transform&);
 
 private:
 	class Request {

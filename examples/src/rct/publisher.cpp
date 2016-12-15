@@ -21,10 +21,10 @@ int main(int argc, char **argv) {
 	Eigen::AngleAxisd orientation(M_PI, Eigen::Vector3d::UnitX());
 	Eigen::Affine3d affine = Eigen::Affine3d().fromPositionOrientationScale(position, orientation,
 						Eigen::Vector3d::Ones());
-	rct::Transform staticTransform(affine, "A", "B", boost::posix_time::microsec_clock::universal_time());
+	rct::Transform staticTransform(affine, "A", "B", boost::posix_time::microsec_clock::universal_time(), rct::STATIC);
 
 	// publish the static transform
-	publisher->sendTransform(staticTransform, rct::STATIC);
+	publisher->sendTransform(staticTransform);
 
 	double angle = 0;
 	while(true) {
@@ -38,10 +38,10 @@ int main(int argc, char **argv) {
 		Eigen::AngleAxisd orientation(angle, Eigen::Vector3d::UnitX());
 		Eigen::Affine3d affine = Eigen::Affine3d().fromPositionOrientationScale(position, orientation,
 							Eigen::Vector3d::Ones());
-		rct::Transform dynamicTransform(affine, "B", "C", boost::posix_time::microsec_clock::universal_time());
+		rct::Transform dynamicTransform(affine, "B", "C", boost::posix_time::microsec_clock::universal_time(), rct::DYNAMIC);
 
 		// publish the dynamic transform
-		publisher->sendTransform(dynamicTransform, rct::DYNAMIC);
+		publisher->sendTransform(dynamicTransform);
 
 		usleep(20 * 1000); // 50hz
 	}

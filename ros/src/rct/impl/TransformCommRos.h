@@ -28,8 +28,8 @@ public:
 	virtual void init(const TransformerConfig &conf);
 	virtual void shutdown();
 
-	virtual bool sendTransform(const Transform& transform, TransformType type);
-	virtual bool sendTransform(const std::vector<Transform>& transforms, TransformType type);
+	virtual bool sendTransform(const Transform& transform);
+	virtual bool sendTransform(const std::vector<Transform>& transforms);
 
 	virtual void addTransformListener(const TransformListener::Ptr& listener);
 	virtual void addTransformListener(const std::vector<TransformListener::Ptr>& listeners);
@@ -44,11 +44,11 @@ private:
 	tf2_ros::StaticTransformBroadcaster tfBroadcasterStatic;
 
 	std::vector<TransformListener::Ptr> listeners;
-	boost::mutex mutex;
+	boost::mutex mutex_listener;
 	std::string name;
 
-	bool running;
 	bool legacyMode;
+	bool running;
 	long legacyIntervalMSec;
 	std::map<std::string, boost::thread*> legacyThreadsCache;
 

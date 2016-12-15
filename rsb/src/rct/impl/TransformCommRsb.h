@@ -42,8 +42,8 @@ public:
 	 * \param is_static Record this transform as a static transform.  It will be good across all time.  (This cannot be changed after the first call.)
 	 * \return True unless an error occured
 	 */
-	virtual bool sendTransform(const Transform& transform, TransformType type);
-	virtual bool sendTransform(const std::vector<Transform>& transforms, TransformType type);
+	virtual bool sendTransform(const Transform& transform);
+	virtual bool sendTransform(const std::vector<Transform>& transforms);
 
 	virtual void addTransformListener(const TransformListener::Ptr& listener);
 	virtual void addTransformListener(const std::vector<TransformListener::Ptr>& listeners);
@@ -54,14 +54,13 @@ public:
 	virtual std::string getAuthorityName() const;
 
 private:
-        bool legacyMode;
 	rsb::ListenerPtr rsbListenerTransform;
 	rsb::Informer<Transform>::Ptr rsbInformerTransform;
 	rsb::Informer< std::vector<Transform> >::Ptr rsbInformerTransformCollection;
 	rsb::ListenerPtr rsbListenerSync;
 	rsb::Informer<void>::Ptr rsbInformerSync;
 	std::vector<TransformListener::Ptr> listeners;
-	boost::mutex mutex;
+	boost::mutex mutex_listener, mutex_staticCache, mutex_dynamicCache;
 	std::map< std::string, std::map<std::string, Transform> > sendCacheDynamic;
 	std::map< std::string, std::map<std::string, Transform> > sendCacheStatic;
 	std::string authority;
@@ -72,6 +71,8 @@ private:
 	std::string scopeSuffixStatic;
 	std::string scopeSuffixDynamic;
 	std::string userKeyAuthority;
+	bool legacyMode;
+
 
 	void transformCallback(rsb::EventPtr t);
 	void triggerCallback(rsb::EventPtr t);

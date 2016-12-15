@@ -11,119 +11,65 @@
 #include <boost/date_time.hpp>
 #include <boost/algorithm/string.hpp>
 #include <rsc/runtime/Printable.h>
+#include "TransformType.h"
+
 
 namespace rct {
 
 class Transform: public rsc::runtime::Printable {
 public:
-	Transform() {
-	}
+	Transform();
+	~Transform();
+	Transform(const Transform & other);
 	Transform(const Eigen::Affine3d &transform, const std::string &frameParent,
-			const std::string &frameChild, const boost::posix_time::ptime &time) :
-			transform(transform), frameParent(frameParent), frameChild(
-					frameChild), time(time) {
-	}
-	virtual ~Transform() {
-	}
+			const std::string &frameChild, const boost::posix_time::ptime &time,const rct::TransformType &type);
+	
+	Transform & operator=(const Transform & rhs);
 
-	const std::string& getFrameChild() const {
-		return frameChild;
-	}
+	const std::string& getFrameChild() const;
+	void setFrameChild(const std::string& frameChild);
 
-	void setFrameChild(const std::string& frameChild) {
-		this->frameChild = frameChild;
-	}
+	const std::string& getFrameParent() const;
+	void setFrameParent(const std::string& frameParent);
 
-	const std::string& getFrameParent() const {
-		return frameParent;
-	}
+	const boost::posix_time::ptime& getTime() const;
+	void setTime(const boost::posix_time::ptime& time);
 
-	void setFrameParent(const std::string& frameParent) {
-		this->frameParent = frameParent;
-	}
+	const std::string& getAuthority() const;
+	void setAuthority(const std::string &authority);
 
-	const boost::posix_time::ptime& getTime() const {
-		return time;
-	}
+	const Eigen::Affine3d& getTransform() const;
+	void setTransform(const Eigen::Affine3d& transform);
+	
+	const rct::TransformType& getTransformType() const;
+	void setTransformType(const rct::TransformType& tType);
+	
+	Eigen::Vector3d getTranslation() const;
+	Eigen::Quaterniond getRotationQuat() const;
+	Eigen::Vector3d getRotationYPR() const;
+	Eigen::Matrix3d getRotationMatrix() const;
 
-	void setTime(const boost::posix_time::ptime& time) {
-		this->time = time;
-	}
-
-	void setAuthority(const std::string &authority) {
-		this->authority = authority;
-	}
-
-	const Eigen::Affine3d& getTransform() const {
-		return transform;
-	}
-
-	void setTransform(const Eigen::Affine3d& transform) {
-		this->transform = transform;
-	}
-
-	const Eigen::Vector3d getTranslation() const {
-		return transform.translation();
-	}
-
-	const Eigen::Quaterniond getRotationQuat() const {
-		Eigen::Quaterniond quat(transform.rotation().matrix());
-		return quat;
-	}
-
-	const Eigen::Vector3d getRotationYPR() const {
-
-		Eigen::Matrix3d mat = transform.rotation().matrix();
-
-    	// this code is taken from buttel btMatrix3x3 getEulerYPR().
-    	// http://bulletphysics.org/Bullet/BulletFull/btMatrix3x3_8h_source.html
-		// first use the normal calculus
-		double yawOut = atan2(mat(1,0), mat(0,0));
-		double pitchOut = asin(-mat(2,0));
-		double rollOut = atan2(mat(2,1), mat(2,2));
-
-		// on pitch = +/-HalfPI
-		if (abs(pitchOut) == M_PI / 2.0) {
-			if (yawOut > 0)
-				yawOut -= M_PI;
-			else
-				yawOut += M_PI;
-			if (pitchOut > 0)
-				pitchOut -= M_PI;
-			else
-				pitchOut += M_PI;
-		}
-
-		return Eigen::Vector3d(yawOut, pitchOut, rollOut);
-	}
-
-	const Eigen::Matrix3d getRotationMatrix() const {
-		return transform.rotation().matrix();
-	}
-
-	const std::string getAuthority() const {
-		return authority;
-	}
-
-	virtual std::string getClassName() const {
-		return "Transform";
-	}
-	virtual void printContents(std::ostream& stream) const {
-
-		Eigen::IOFormat commaFmt(2, Eigen::DontAlignCols, ",", ";", "", "", "[", "]");
-
-		stream << "authority = " << authority;
-		stream << ", frameParent = " << frameParent;
-		stream << ", frameChild = " << frameChild;
-		stream << ", time = " << time;
-		stream << ", transform = " << transform.matrix().format(commaFmt);
-	}
+	void printContents(std::ostream& stream) const;
 
 private:
-	Eigen::Affine3d transform;
+	/* WARNING: It is saver to have a pointer to Eigen members.
+	 * As Eigen relies heavily an alignment  we have to make sure
+	 * that a previously alignt object stays aligned for the whole lifecycle.
+	 * 
+	 * As STL containers might move the objects in the memory are copy them to other locations
+	 * the alignment might break if we keep the instance within our class.
+	 * Having the pointer moved is save.
+	 * 
+	 * Reference: https://eigen.tuxfamily.org/dox/group__TopicStlContainers.html
+	 * 
+	 * If you do not follow these guidelines you will run into segmentation faults.
+	 */ 	
+	Eigen::Affine3d *transform;	
+	
 	std::string frameParent;
 	std::string frameChild;
 	boost::posix_time::ptime time;
 	std::string authority;
+	TransformType type;
 };
 }
