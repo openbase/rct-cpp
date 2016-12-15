@@ -168,8 +168,10 @@ void TransformCommRos::transformCallback(const geometry_msgs::TransformStamped r
 
 	TransformerTF2::convertTfToTransform(rosTransform, t);
 
+	t.setTransformType(is_static ? STATIC : DYNAMIC);
 	t.setAuthority(authorityClean);
-	
+	RSCTRACE(logger, "Converted to:" << t);
+
 	boost::mutex::scoped_lock(mutex_listener);
 	for (it = listeners.begin(); it != listeners.end(); ++it) {
 		TransformListener::Ptr l = *it;
