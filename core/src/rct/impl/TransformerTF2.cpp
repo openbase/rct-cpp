@@ -67,7 +67,7 @@ bool TransformerTF2::setTransform(const Transform& transform_in) {
 	geometry_msgs::TransformStamped t;
 	convertTransformToTf(transform_in, t);
 
-	return tfBuffer.setTransform(t, transform_in.getAuthority());
+	return tfBuffer.setTransform(t, transform_in.getAuthority(), (transform_in.getTransformType() == STATIC));
 }
 
 Transform TransformerTF2::lookupTransform(const std::string& target_frame,
