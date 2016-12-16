@@ -34,16 +34,12 @@ public:
 
 	/** \brief Add transform information to the rct data structure
 	 * \param transform The transform to store
-	 * \param authority The source of the information for this transform
-	 * \param is_static Record this transform as a static transform.  It will be good across all time.  (This cannot be changed after the first call.)
 	 * \return True unless an error occured
 	 */
 	virtual bool sendTransform(const Transform& transform) = 0;
 
 	/** \brief Add transform information to the rct data structure
-	 * \param transform The transform to store
-	 * \param authority The source of the information for this transform
-	 * \param is_static Record this transform as a static transform.  It will be good across all time.  (This cannot be changed after the first call.)
+	 * \param transform The transforms to store
 	 * \return True unless an error occured
 	 */
 	virtual bool sendTransform(const std::vector<Transform>& transforms) = 0;
