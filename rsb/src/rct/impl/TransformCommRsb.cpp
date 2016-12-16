@@ -161,7 +161,7 @@ bool TransformCommRsb::sendTransform(const Transform& transform) {
 
 	MetaData meta;
         string usedAuthority = "";
-	if (transform.getAuthority() == "") {
+	if (transform.getAuthority() == "uninitialized") {
 		meta.setUserInfo(userKeyAuthority, authority);
                 usedAuthority = authority;
 	} else {
