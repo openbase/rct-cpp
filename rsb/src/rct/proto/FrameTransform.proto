@@ -3,7 +3,7 @@ package rct;
 import "rst/geometry/Pose.proto";
 import "rst/timing/Timestamp.proto";
 
-option java_outer_classname = "FrameTransform";
+option java_outer_classname = "FrameTransformType";
 option java_package = "rct.proto";
 
 /**
