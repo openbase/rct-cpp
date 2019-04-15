@@ -1,12 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-# --- generate protocol buffers
-PROTOBUF_GENERATE(CPP PROTO_CPP_SOURCES PROTO_CPP_HEADERS
-                      PROTOFILES ${CMAKE_CURRENT_SOURCE_DIR}/rct/proto/FrameTransform.proto
-                      PROTOROOT ${CMAKE_CURRENT_SOURCE_DIR}/rct/proto/
-                      INCLUDES ${RST_STABLE_PROTO_ROOT}
-                      OUTPATH ${CMAKE_CURRENT_BINARY_DIR}/rct/)
-
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # --- build instructions proto ---
