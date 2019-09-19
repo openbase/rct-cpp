@@ -11,8 +11,8 @@
 #include <rsb/converter/SerializationException.h>
 #include <rsb/converter/ProtocolBufferConverter.h>
 
-#include <rct/FrameTransform.pb.h>
-#include <rst/geometry/Pose.pb.h>
+#include <openbase/type/geometry/FrameTransform.pb.h>
+#include <openbase/type/geometry/Pose.pb.h>
 
 using namespace std;
 using namespace boost;
@@ -73,14 +73,14 @@ std::string TransformConverter::serialize(const rsb::AnnotatedData& data, std::s
     boost::shared_ptr<Transform> domain = static_pointer_cast<Transform>(data.second);
 
 	// Fill protocol buffer object
-	rct::FrameTransform proto;
+	openbase::type::geometry::FrameTransform proto;
 
 	//
 	domainToRST(*domain, proto);
 
 	// Use embedded ProtoBuf converter for serialization to wire
 	return converter->serialize(
-			make_pair(rsc::runtime::typeName<rct::FrameTransform>(),
+			make_pair(rsc::runtime::typeName<openbase::type::geometry::FrameTransform>(),
 					boost::shared_ptr<void>(&proto, rsc::misc::NullDeleter())), wire);
 }
 
@@ -88,7 +88,7 @@ rsb::AnnotatedData TransformConverter::deserialize(const std::string& wireType,
 		const std::string& wire) {
 
 	// Deserialize and cast to specific ProtoBuf type
-	boost::shared_ptr<rct::FrameTransform> proto = boost::static_pointer_cast<rct::FrameTransform>(
+	boost::shared_ptr<openbase::type::geometry::FrameTransform> proto = boost::static_pointer_cast<openbase::type::geometry::FrameTransform>(
 			converter->deserialize(wireType, wire).second);
 
 	// Instantiate domain object
