@@ -18,6 +18,7 @@ using namespace std;
 using namespace boost;
 using namespace rsb;
 using namespace rsb::converter;
+using namespace openbase::type::geometry;
 
 namespace rct {
 
