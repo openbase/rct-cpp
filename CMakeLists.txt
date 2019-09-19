@@ -102,20 +102,21 @@ if(BUILD_RSB_SUPPORT)
 	    message(FATAL_ERROR "\nprotoc executable not found\nIn order skip building RSB support add option -DBUILD_RSB_SUPPORT=OFF")
 	endif()
 	
-	#rsb/t
+	#rsb
 	find_package(RSB 0.18 QUIET)
 	find_package(openbase-type QUIET)
-	if(RSB_FOUND AND openbase-type)
+
+	if(RSB_FOUND AND OPENBASE_TYPE_FOUND)
 		message(STATUS "RSB version: ${RSB_VERSION}")
-		message(STATUS "openbase type version: ${openbase-type_VERSION}")
+		message(STATUS "openbase type version: ${OPENBASE_TYPE_VERSION}")
 		set(RCT_HAVE_RSB TRUE)
-		include_directories(BEFORE SYSTEM  ${RSB_INCLUDE_DIRS} ${openbase-type_INCLUDE_DIRS})
+		include_directories(BEFORE SYSTEM  ${RSB_INCLUDE_DIRS} ${OPENBASE_TYPE_INCLUDE_DIRS})
 		link_directories(${RSB_LIBRARY_DIRS})
 		add_definitions(${RST_CFLAGS})
-	else(RSB_FOUND AND openbase-type_FOUND)
+	else(RSB_FOUND AND OPENBASE_TYPE_FOUND)
 		message(FATAL_ERROR "RSB and openbase type not found!")
 		message(STATUS "In order skip building RSB support add option -DBUILD_RSB_SUPPORT=OFF")
-	endif(RSB_FOUND AND openbase-type_FOUND)
+	endif(RSB_FOUND AND OPENBASE_TYPE_FOUND)
 endif(BUILD_RSB_SUPPORT)
 
 configure_file(${CMAKE_SOURCE_DIR}/core/src/rct/rctConfig.h.in ${CMAKE_BINARY_DIR}/rct/rctConfig.h)
