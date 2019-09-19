@@ -78,6 +78,8 @@ link_directories(${tf2-minimal_LIBRARY_DIRS})
 message(STATUS "tf2 version: ${tf2-minimal_VERSION}")
 set(RCT_HAVE_TF2 TRUE)
 
+find_package(openbase-types REQUIRED)
+
 if(BUILD_ROS_SUPPORT)
 	find_package(roscpp)
 	include_directories(BEFORE SYSTEM  ${roscpp_INCLUDE_DIRS})
@@ -104,19 +106,16 @@ if(BUILD_RSB_SUPPORT)
 	
 	#rsb
 	find_package(RSB 0.18 QUIET)
-	find_package(openbase-type QUIET)
 
-	if(RSB_FOUND AND OPENBASE_TYPE_FOUND)
+	if(RSB_FOUND)
 		message(STATUS "RSB version: ${RSB_VERSION}")
-		message(STATUS "openbase type version: ${OPENBASE_TYPE_VERSION}")
 		set(RCT_HAVE_RSB TRUE)
-		include_directories(BEFORE SYSTEM  ${RSB_INCLUDE_DIRS} ${OPENBASE_TYPE_INCLUDE_DIRS})
+		include_directories(BEFORE SYSTEM  ${RSB_INCLUDE_DIRS})
 		link_directories(${RSB_LIBRARY_DIRS})
-		add_definitions(${RST_CFLAGS})
-	else(RSB_FOUND AND OPENBASE_TYPE_FOUND)
-		message(FATAL_ERROR "RSB and openbase type not found!")
+	else(RSB_FOUND)
+		message(FATAL_ERROR "RSB not found!")
 		message(STATUS "In order skip building RSB support add option -DBUILD_RSB_SUPPORT=OFF")
-	endif(RSB_FOUND AND OPENBASE_TYPE_FOUND)
+	endif(RSB_FOUND)
 endif(BUILD_RSB_SUPPORT)
 
 configure_file(${CMAKE_SOURCE_DIR}/core/src/rct/rctConfig.h.in ${CMAKE_BINARY_DIR}/rct/rctConfig.h)
