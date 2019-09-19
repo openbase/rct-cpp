@@ -78,7 +78,7 @@ link_directories(${tf2-minimal_LIBRARY_DIRS})
 message(STATUS "tf2 version: ${tf2-minimal_VERSION}")
 set(RCT_HAVE_TF2 TRUE)
 
-find_package(openbase-types REQUIRED)
+find_package(openbase-type REQUIRED)
 
 if(BUILD_ROS_SUPPORT)
 	find_package(roscpp)
