@@ -162,7 +162,7 @@ bool TransformerTF2::canTransform(const std::string& target_frame,
 			ros::Time().fromBoost(source_time), fixed_frame, error_msg);
 }
 
-void TransformerTF2::newTransformAvailable(const rct::Transform& t, bool isStatic) {
+void TransformerTF2::newTransformAvailable(const openbase::type::geometry:Transform& t, bool isStatic) {
 	setTransform(t, isStatic);
 }
 

@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 	    // lookup a transform which describes the status for the target system at the
 	    // current point in time ("right now"). This will fail because the required information is
 	    // not available yet.
-		rct::Transform t = receiver->lookupTransform("A", "C",
+		openbase::type::geometry:Transform t = receiver->lookupTransform("A", "C",
 				boost::posix_time::microsec_clock::universal_time());
 
 		std::cout << "Translation (x,y,z):\n" << t.getTranslation() << std::endl;
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 		rct::TransformReceiver::FuturePtr future = receiver->requestTransform("A", "C",
 				boost::posix_time::microsec_clock::universal_time());
 
-		rct::Transform t = future->get(2.0);
+		openbase::type::geometry:Transform t = future->get(2.0);
 
 		std::cout << "Translation (x,y,z):\n" << t.getTranslation() << std::endl;
 		std::cout << "Rotation (Quat w,x,y,z):\n" << t.getRotationQuat().w() << "\n"
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
 	try {
 	    // lookup the most recent available transform for the requested frames.
-		rct::Transform t = receiver->lookupTransform("A", "C", boost::posix_time::from_time_t(0));
+		openbase::type::geometry:Transform t = receiver->lookupTransform("A", "C", boost::posix_time::from_time_t(0));
 
 		std::cout << "Translation (x,y,z):\n" << t.getTranslation() << std::endl;
 		std::cout << "Rotation (Quat w,x,y,z):\n" << t.getRotationQuat().w() << "\n"
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 		usleep(20*1000);
 
 		// lookup at now minus 20 milliseconds
-		rct::Transform t = receiver->lookupTransform("A", "C",
+		openbase::type::geometry:Transform t = receiver->lookupTransform("A", "C",
 				boost::posix_time::microsec_clock::universal_time() - boost::posix_time::time_duration(0, 0, 0, 20*1000));
 
 		std::cout << "Translation (x,y,z):\n" << t.getTranslation() << std::endl;

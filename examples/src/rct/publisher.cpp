@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 	Eigen::AngleAxisd orientation(M_PI, Eigen::Vector3d::UnitX());
 	Eigen::Affine3d affine = Eigen::Affine3d().fromPositionOrientationScale(position, orientation,
 						Eigen::Vector3d::Ones());
-	rct::Transform staticTransform(affine, "A", "B", boost::posix_time::microsec_clock::universal_time());
+	openbase::type::geometry:Transform staticTransform(affine, "A", "B", boost::posix_time::microsec_clock::universal_time());
 
 	// publish the static transform
 	publisher->sendTransform(staticTransform, rct::STATIC);
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 		Eigen::AngleAxisd orientation(angle, Eigen::Vector3d::UnitX());
 		Eigen::Affine3d affine = Eigen::Affine3d().fromPositionOrientationScale(position, orientation,
 							Eigen::Vector3d::Ones());
-		rct::Transform dynamicTransform(affine, "B", "C", boost::posix_time::microsec_clock::universal_time());
+		openbase::type::geometry:Transform dynamicTransform(affine, "B", "C", boost::posix_time::microsec_clock::universal_time());
 
 		// publish the dynamic transform
 		publisher->sendTransform(dynamicTransform, rct::DYNAMIC);
