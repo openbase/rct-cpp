@@ -10,7 +10,7 @@ get_filename_component(OPENBASE_RCT_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 # --- dependencies ---
 #rsc
-find_package(RSC 0.11 REQUIRED)
+find_package(RSC 0.18 REQUIRED)
 message(STATUS "RSC version: ${RSC_VERSION}")
 message(STATUS "RSC libraries: ${RSC_LIBRARIES}")
 message(STATUS "RSC runtime library dirs: ${RSC_RUNTIME_LIBRARY_DIRS}")
@@ -36,8 +36,8 @@ list(APPEND ADDITIONAL_LIBRARY_DIRS @tf2-minimal_LIBRARY_DIRS@)
 set(RCT_HAVE_TF2 TRUE)
 
 #rsb/t
-find_package(RSB 0.11 QUIET)
-find_package(RST 0.11 QUIET)
+find_package(RSB 0.18 QUIET)
+find_package(RST 0.18 QUIET)
 if(RSB_FOUND AND RST_FOUND)
 	message(STATUS "RSB version: ${RSB_VERSION}")
 	message(STATUS "RST version: ${RST_VERSION}")
