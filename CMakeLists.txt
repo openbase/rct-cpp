@@ -144,8 +144,8 @@ if(BUILD_EXAMPLES)
 	ADD_SUBDIRECTORY(examples/src)
 endif(BUILD_EXAMPLES)
 
-configure_file(RCTConfig.cmake.in "${PROJECT_BINARY_DIR}/RCTConfig.cmake" @ONLY)
-configure_file(RCTConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/RCTConfigVersion.cmake" @ONLY)
+configure_file(openbase-rct-config.cmake.in ${CMAKE_CONFIG_FILE_PATH} @ONLY)
+configure_file(openbase-rct-config-version.cmake.in ${CMAKE_CONFIG_FILE_VERSION_PATH} @ONLY)
 configure_file(RCT-ROSConfig.cmake.in "${PROJECT_BINARY_DIR}/RCT-ROSConfig.cmake" @ONLY)
 configure_file(RCT-ROSConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/RCT-ROSConfigVersion.cmake" @ONLY)
 
