@@ -145,7 +145,7 @@ if(BUILD_EXAMPLES)
 endif(BUILD_EXAMPLES)
 
 configure_file(openbase-rct-config.cmake.in ${CMAKE_CONFIG_FILE_PATH} @ONLY)
-configure_file(openbase-rct-config-version.cmake.in ${CMAKE_CONFIG_FILE_VERSION_PATH} @ONLY)
+configure_file(openbase-rct-config-version.cmake.in ${CMAKE_CONFIG_VERSION_FILE_PATH} @ONLY)
 configure_file(RCT-ROSConfig.cmake.in "${PROJECT_BINARY_DIR}/RCT-ROSConfig.cmake" @ONLY)
 configure_file(RCT-ROSConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/RCT-ROSConfigVersion.cmake" @ONLY)
 
