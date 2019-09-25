@@ -150,19 +150,6 @@ configure_file(RCTConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/RCTConfigVersion
 configure_file(RCT-ROSConfig.cmake.in "${PROJECT_BINARY_DIR}/RCT-ROSConfig.cmake" @ONLY)
 configure_file(RCT-ROSConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/RCT-ROSConfigVersion.cmake" @ONLY)
 
-### setup package config
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-        ${CMAKE_CONFIG_VERSION_FILE_PATH}
-        VERSION ${OPENBASE_RCT_VERSION}
-        COMPATIBILITY SameMajorVersion)
-
-# install targets
-install(TARGETS ${PROJECT_NAME}
-        EXPORT ${PROJECT_NAME}-export
-        LIBRARY DESTINATION lib
-        PUBLIC_HEADER DESTINATION include)
-		
 install(FILES
 		${CMAKE_CONFIG_FILE_PATH}
 		${CMAKE_CONFIG_VERSION_FILE_PATH}
@@ -174,33 +161,3 @@ install(FILES
 install(DIRECTORY
 		"${PROJECT_SOURCE_DIR}/cmake"
 		DESTINATION "${DATADIR}")
-
-### export
-install(EXPORT ${PROJECT_NAME}-export
-        FILE ${CMAKE_CONFIG_FILE_NAME}
-        NAMESPACE ${PROJECT_NAMESPACE}::
-        DESTINATION share/${PROJECT_NAME})
-
-export(EXPORT ${PROJECT_NAME}-export
-        FILE ${CMAKE_CONFIG_FILE_PATH}
-        NAMESPACE ${PROJECT_NAMESPACE}::)
-
-install(EXPORT ${PROJECT_NAME}-export
-        FILE ${CMAKE_CONFIG_FILE_NAME}
-        NAMESPACE ${PROJECT_NAMESPACE}::
-        DESTINATION ${CONFIG_PACKAGE_LOCATION})
-
-install(EXPORT ${PROJECT_NAME}-export
-        FILE ${CMAKE_CONFIG_VERSION_FILE_NAME}
-        NAMESPACE ${PROJECT_NAMESPACE}::
-        DESTINATION share/${PROJECT_NAME})
-
-export(EXPORT ${PROJECT_NAME}-export
-        FILE ${CMAKE_CONFIG_FILE_PATH}
-        NAMESPACE ${PROJECT_NAMESPACE}::)
-
-install(EXPORT ${PROJECT_NAME}-export
-        FILE ${CMAKE_CONFIG_VERSION_FILE_NAME}
-        NAMESPACE ${PROJECT_NAMESPACE}::
-        DESTINATION ${CONFIG_PACKAGE_LOCATION})
-
